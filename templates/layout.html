@@ -17,7 +17,7 @@
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand align-middle" href="#"><img src="{{url_for('static', filename='img/logo.png')}}" width="60" class="d-inline-block align-top" alt="">  Book Review</a>
+    <a class="navbar-brand align-middle" href="#"><img src="{{url_for('static', filename='img/logo.png')}}" width="60" class="d-inline-block align-top" alt=""> Book Review</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -35,10 +35,14 @@
           <a class="nav-link" href="{{url_for('register')}}">Register </a>
         </li>
         {% else %}
-        <span class="nav-item">{{ session['first_name']}} {{ session['last_name']}}</span>
-        <form action="{{url_for('logout')}}" method="POST">
-          <button type="submit" class="btn btn-primary">Logout</button>
-        </form>
+        <li class="nav-item">
+          <span class="nav-link">{{ session['first_name']}} {{ session['last_name']}}</span>
+        </li>
+        <li class="nav-item">
+          <form class="nav-link" action="{{url_for('logout')}}" method="POST">
+            <button type="submit" class="btn btn-primary">Logout</button>
+          </form>
+        </li>
         <!-- <li class="nav-item dropdown">
           <a class="nav-link" href="{{url_for('logout')}}">Logout </a>
         </li> -->
@@ -69,11 +73,11 @@
       {% endwith %}
 
     </div>
-    </div>
-    <div class="container main">
-      {% block body %}
-      {% endblock %}
-    </div>
+  </div>
+  <div class="container main">
+    {% block body %}
+    {% endblock %}
+  </div>
 
   <footer class="footer">
     <div class="container">
@@ -111,4 +115,5 @@
   <!-- main script -->
   <script src="url_for('static', filename='js/scripts.js')"></script>
 </body>
+
 </html>

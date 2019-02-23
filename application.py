@@ -32,13 +32,17 @@ def index():
 def register():
     form = RegistrationForm(csrf_enabled=False)
     if request.method == "GET":
+        if session.get("email"):
+            flash(
+                f"you are alredy logged in as {session['first_name']} {session['last_name']}.")
+            return redirect(url_for("index"))
         return render_template("register.html", form=form)
     elif form.validate_on_submit():
         new_user = {
-        "first_name": form.first_name.data,
-        "last_name": form.last_name.data,
-        "email": form.email.data,
-        "password": form.password.data
+            "first_name": form.first_name.data,
+            "last_name": form.last_name.data,
+            "email": form.email.data,
+            "password": form.password.data
         }
         check = add_user(db, new_user)
         # if the user added without errors then login the user
@@ -68,7 +72,11 @@ def register():
 def login():
     form = LoginForm(csrf_enabled=False)
     if request.method == "GET":
-        return "this is the login template. C'MON just imagine"
+        if session.get("email"):
+            flash(
+                f"you are alredy logged in as {session['first_name']} {session['last_name']}.")
+            return redirect(url_for("index"))
+        return render_template("login.html", form=form)
     if request.method == "POST":
         email = form.email.data
         password = form.password.data
@@ -79,7 +87,7 @@ def login():
             return redirect(url_for("index"))
         else:
             flash("the credintials are wrong please correct eamil or password", 'danger')
-            return "this is the login template. C'MON just imagine"
+            return render_template("login.html", form=form)
 
 # to log out using POST request
 @app.route("/logout", methods=["POST"])
@@ -94,4 +102,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(debug=True)
