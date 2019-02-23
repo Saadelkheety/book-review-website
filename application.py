@@ -1,6 +1,6 @@
 import json
 
-from flask import Flask, session, request, flash, redirect, url_for
+from flask import Flask, session, request, flash, redirect, url_for, render_template
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -32,7 +32,7 @@ def index():
 def register():
     form = RegistrationForm(csrf_enabled=False)
     if request.method == "GET":
-        return "this is the registration template. C'MON just imagine"
+        return render_template("register.html", form=form)
     elif form.validate_on_submit():
         new_user = {
         "first_name": form.first_name.data,
@@ -58,12 +58,10 @@ def register():
             return redirect(url_for("register"))
     # if the validation raise errorMessages then flash it
     elif form.errors.items():
-        err_str = ""
         for fieldName, errorMessages in form.errors.items():
             for err in errorMessages:
-                err_str = err_str + err +"\n"
-        flash(err_str, 'danger')
-        return redirect(url_for("register"))
+                flash(err)
+        return render_template("register.html", form=form)
 
 
 @app.route("/login", methods=["POST", "GET"])

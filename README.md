@@ -1,5 +1,4 @@
 # book review website
-# Project 1 (Web Programming with Python and JavaScript)
 this is a book review website. Users will be able to register for the website and then log in using their email and password. Once they log in, they will be able to search for books, leave reviews for individual books, and see the reviews made by other people. the website also use the a third-party API by Goodreads, another book review website, to pull in ratings from a broader audience. Finally, users will be able to query for book details and book reviews programmatically via the website’s API.
 
 ## the live version
@@ -21,3 +20,13 @@ ps: make sure you are in the outer directory of the project
   where registered users can Login
 3. logout:
   where the logged in users can logout
+
+## database_service.py:
+- it's the module contains all the functions deal directly with the database which they are:
+1. add_user(db, user): adding the given user dict to the given db database.
+2. authenticate_user(db, email, password): check the credentials passed within the passed db database.
+
+
+## decorators.py:
+- it's the module contain the required decorators for the app which they are:
+1. authenticate: to make sure there is a logged in user

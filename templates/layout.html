@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <link rel="icon" type="image/png" href="{{url_for('static', filename='img/favicon.png')}}">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap-social.css')}}">
+  <!-- main CSS -->
+  <link rel="stylesheet" href="{{url_for('static', filename='css/stylesheet.css')}}">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand align-middle" href="#"><img src="{{url_for('static', filename='img/logo.png')}}" width="60" class="d-inline-block align-top" alt="">  Book Review</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{{url_for('index')}}">Home </a>
+        </li>
+        {%if 'email' not in session %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('login')}}">Login </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('register')}}">Register </a>
+        </li>
+        {% else %}
+        <span class="nav-item">{{ session['first_name']}} {{ session['last_name']}}</span>
+        <form action="{{url_for('logout')}}" method="POST">
+          <button type="submit" class="btn btn-primary">Logout</button>
+        </form>
+        <!-- <li class="nav-item dropdown">
+          <a class="nav-link" href="{{url_for('logout')}}">Logout </a>
+        </li> -->
+        {% endif %}
+      </ul>
+      {%if 'email' in session %}
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+      {% endif %}
+    </div>
+  </nav>
+
+  <div class="container-fluid flashes">
+    <div class='row flash justify-content-center'>
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+
+      <ul>
+        {% for message in messages %}
+        <div class="col-12">
+          <li> <strong> {{ message }} </strong> </li>
+        </div>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% endwith %}
+
+    </div>
+    </div>
+    <div class="container main">
+      {% block body %}
+      {% endblock %}
+    </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="row align-items-center justify-content-center">
+        <div class="offset-md-1 col-md-5 justify-content-center">
+          <address>
+            <ul class="list-unstyled">
+              <li><i class="fas fa-map-marker-alt"></i> Alexandria, Egypt</li>
+              <li><i class="fas fa-at"></i><a target="_blank" class="link-unstyled" href="mailto:SaadElkeety@gmail.com"> SaadElkeety@gmail.com</a></li>
+              <li><i class="fas fa-mobile"></i> +201225956167 || +201005689586</li>
+            </ul>
+          </address>
+        </div>
+        <div class="col-12 col-sm-5">
+          <div class="text-center">
+            <a target="_blank" class="btn btn-social-icon btn-github" href="https://github.com/Saadelkheety"><i class="fab fa-github"></i></i></a>
+            <a target="_blank" class="btn btn-social-icon btn-facebook" href="https://www.facebook.com/saadelkheety"><i class="fab fa-facebook-f"></i></a>
+            <a target="_blank" class="btn btn-social-icon btn-linkedin" href="https://www.linkedin.com/in/saadelkheety/"><i class="fab fa-linkedin-in"></i></a>
+            <a target="_blank" class="btn btn-social-icon" href="mailto:SaadElkeety@gmail.com"><i class="fas fa-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-auto">
+          <p><b>Copyright © 2019 <a href="https://www.facebook.com/saadelkheety" target="_blank">Saad Elkheety</a> All rights reserved.</b></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- jQuery first, then Popper.js, then Bootstrap JS. -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <!-- main script -->
+  <script src="url_for('static', filename='js/scripts.js')"></script>
+</body>
+</html>
