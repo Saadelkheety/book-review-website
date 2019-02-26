@@ -1,11 +1,12 @@
 import json
+import jsonify
 
-from flask import Flask, session, request, flash, redirect, url_for, render_template
+from flask import Flask, session, request, flash, redirect, url_for, render_template, Response
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-from database_service import add_user, authenticate_user
+from database_service import add_user, authenticate_user, search_books
 from forms import RegistrationForm, LoginForm
 from decorators import authenticate
 
@@ -99,6 +100,15 @@ def logout():
     flash("logged out")
     print(session, "is empty?")
     return redirect(url_for("login"))
+
+
+@app.route("/search", methods=["POST"])
+def search():
+    search_word = request.form.get("search")
+    books = search_books(db, search_word)
+    books = ','.join(map(str, books))
+    print(books)
+    return json.dumps(books)
 
 
 if __name__ == '__main__':
