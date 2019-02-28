@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% set active_page = "index" %}
 {% block title %}
 Book review app
 {% endblock %}
@@ -31,21 +32,20 @@ Book review app
     {%if current_page > 1%}
     <li class="page-item">
       <a class="page-link" href="{{ url_for('search', page=current_page-1, search=search) }}" aria-label="Previous">
-       <span aria-hidden="true">&laquo;</span>
-     </a>
+        <span aria-hidden="true">&laquo;</span>
+      </a>
     </li>
     {% endif %}
 
     <!-- {% for _ in range(1, nr_of_pages+1) %}
     <li class="page-item"><a class="page-link" href="{{ url_for('search', page=temp) }}">{{ temp }}</a></li>
     {% endfor %} -->
-    {%if current_page < nr_of_pages %}
-    <li class="page-item">
+    {%if current_page < nr_of_pages %} <li class="page-item">
       <a class="page-link" href="{{ url_for('search', search=search, page=current_page+1) }}" aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
       </a>
-    </li>
-    {% endif %}
+      </li>
+      {% endif %}
   </ul>
 </nav>
 {% else %}

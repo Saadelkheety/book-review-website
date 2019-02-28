@@ -6,15 +6,15 @@ with open('books.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
     for row in csv_reader:
-        if line_count < 3947: # line_count == 0:
+        if line_count == 0:
             print(f'Column names are {", ".join(row)}')
             line_count += 1
             continue
         new_book = {
-            "isbn": row[0],
-            "title": row[1],
-            "author": row[2],
-            "year": row[3]
+            "isbn": row[0].lower(),
+            "title": row[1].lower(),
+            "author": row[2].lower(),
+            "year": row[3].lower()
         }
         check = add_book(db, new_book)
         if check == True:

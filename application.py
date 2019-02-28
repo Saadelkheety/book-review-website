@@ -104,18 +104,19 @@ def logout():
 
 
 @app.route("/search", methods=["GET"])
+@authenticate
 def search():
-    search_word = request.args.get("search")
+    search_word = request.args.get("search").lower()
     books = search_books(db, search_word)
     # books = ','.join(map(str, books))
-    # print(books)
     PAGE_SIZE = 10
     page = request.args.get("page")
     if not page:
         page = 1
     nr_of_pages = int((len(books) / PAGE_SIZE))
-    if not nr_of_pages:
+    if len(books) == 0:
         flash("there are no results try another book or check the words you write.")
+    if not nr_of_pages:
         nr_of_pages = 1
     print("this is the # of pages:   ", nr_of_pages)
     converted_page = int(page)
@@ -124,10 +125,12 @@ def search():
               "but the requisted is:  ", converted_page)
         abort(404)
 
-    from_idx = converted_page * PAGE_SIZE - 1
+    from_idx = (converted_page - 1) * PAGE_SIZE
     stop_idx = from_idx + PAGE_SIZE
     books = books[from_idx:stop_idx]
-    return render_template("index.html", books=books, nr_of_pages=nr_of_pages, current_page = converted_page, search=search_word)
+    print(from_idx, stop_idx)
+    print(books)
+    return render_template("index.html", books=books, nr_of_pages=nr_of_pages, current_page=converted_page, search=search_word)
     # books = ','.join(map(str, books))
     # print(books)
     # return json.dumps(books)
