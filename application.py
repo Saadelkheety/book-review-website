@@ -82,9 +82,10 @@ def login():
     if request.method == "POST":
         email = form.email.data
         password = form.password.data
+        print(email, password)
         # sure the credintials is right and create a login session
         user = authenticate_user(db, email, password)
-        print(user.get("email") + " has been logged in.")
+        print(email + " has been logged in.")
         if user:
             return redirect(url_for("index"))
         else:

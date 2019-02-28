@@ -25,7 +25,9 @@ def add_user(db, user):
 def authenticate_user(db, email, password):
     cmd = "SELECT * FROM users WHERE email = :email"
     user = db.execute(cmd, {"email": email}).fetchone()
-    if check_password_hash(user.password, password):
+    if not user:
+        return False
+    elif check_password_hash(user.password, password):
         session["id"] = user.id
         session["email"] = user.email
         session["first_name"] = user.first_name
