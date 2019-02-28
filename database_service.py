@@ -54,9 +54,9 @@ def add_book(db, book):
     return "database error"
 
 
-def search_books(db, search, shift = 0):
-    books = db.execute("SELECT * FROM books WHERE isbn LIKE :search or title LIKE :search or author LIKE :search ORDER BY TITLE OFFSET :offset LIMIT 10;", {
-        "search": "%" + search + "%", "offset": shift * 10}).fetchall()
+def search_books(db, search, shift=0):
+    books = db.execute("SELECT * FROM books WHERE isbn LIKE :search or title LIKE :search or author LIKE :search ORDER BY TITLE;", {
+        "search": "%" + search + "%"}).fetchall()
     return books
 
 

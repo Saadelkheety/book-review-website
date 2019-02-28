@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block title %}
+Book review app
+{% endblock %}
+{% block body %}
+{%if books%}
+<h3>Search Results</h3>
+<table class="table table-striped table-responsive">
+  <thead>
+    <tr>
+      <th scope="col">ISBN</th>
+      <th scope="col">Title</th>
+      <th scope="col">Author</th>
+      <th scope="col">Published year</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for book in books %}
+    <tr>
+      <th scope="row">{{ book[1] }}</th>
+      <td>{{ book[2] }}</td>
+      <td>{{ book[3] }}</td>
+      <td>{{ book[4] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    {%if current_page > 1%}
+    <li class="page-item">
+      <a class="page-link" href="{{ url_for('search', page=current_page-1, search=search) }}" aria-label="Previous">
+       <span aria-hidden="true">&laquo;</span>
+     </a>
+    </li>
+    {% endif %}
+
+    <!-- {% for _ in range(1, nr_of_pages+1) %}
+    <li class="page-item"><a class="page-link" href="{{ url_for('search', page=temp) }}">{{ temp }}</a></li>
+    {% endfor %} -->
+    {%if current_page < nr_of_pages %}
+    <li class="page-item">
+      <a class="page-link" href="{{ url_for('search', search=search, page=current_page+1) }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+{% else %}
+{%if 'email' in session %}
+
+<form action="{{ url_for('search') }}" method="GET">
+  <legend align="left">
+    <h2>Search for your favourite books:</h2>
+  </legend>
+  <div class="form-group">
+    <input name="search" id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+  </div>
+  <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
+{% endif %}
+{% endif %}
+{% endblock %}

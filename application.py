@@ -2,6 +2,7 @@ import json
 import jsonify
 
 from flask import Flask, session, request, flash, redirect, url_for, render_template, Response
+from flask import abort
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -26,7 +27,7 @@ db = scoped_session(sessionmaker(bind=engine))
 @app.route("/")
 @authenticate
 def index():
-    return f"Hi, ya3am {session['first_name']} {session['last_name']}"
+    return render_template("index.html")
 
 # registration route
 @app.route("/register", methods=["POST", "GET"])
@@ -102,13 +103,34 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route("/search", methods=["POST"])
+@app.route("/search", methods=["GET"])
 def search():
-    search_word = request.form.get("search")
+    search_word = request.args.get("search")
     books = search_books(db, search_word)
-    books = ','.join(map(str, books))
-    print(books)
-    return json.dumps(books)
+    # books = ','.join(map(str, books))
+    # print(books)
+    PAGE_SIZE = 10
+    page = request.args.get("page")
+    if not page:
+        page = 1
+    nr_of_pages = int((len(books) / PAGE_SIZE))
+    if not nr_of_pages:
+        flash("there are no results try another book or check the words you write.")
+        nr_of_pages = 1
+    print("this is the # of pages:   ", nr_of_pages)
+    converted_page = int(page)
+    if converted_page > nr_of_pages or converted_page < 0:
+        print("this is the # of pages:   ", nr_of_pages,
+              "but the requisted is:  ", converted_page)
+        abort(404)
+
+    from_idx = converted_page * PAGE_SIZE - 1
+    stop_idx = from_idx + PAGE_SIZE
+    books = books[from_idx:stop_idx]
+    return render_template("index.html", books=books, nr_of_pages=nr_of_pages, current_page = converted_page, search=search_word)
+    # books = ','.join(map(str, books))
+    # print(books)
+    # return json.dumps(books)
 
 
 if __name__ == '__main__':

@@ -7,19 +7,26 @@
 nav {
   background-color: rgba(255, 255, 255, 0.5);
   color: #000; }
-
+nav ul {
+  align-items: center;
+}
+nav ul {
+  align-items: center;
+}
 .main {
   margin-top: 20px;
   margin-bottom: 30px;
+  min-height: 50vh;
 }
 form{
   padding:20px;
 }
-}
-.footer {
+
+footer {
   background-color: rgba(255, 255, 255, 0.5);
   color: #000;
-  padding-top: 100px; }
+  margin-top: 10px; }
+
   .form-group .error-message + input {
     border-bottom: 2px solid #db4437;
   }

@@ -17,28 +17,28 @@
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand align-middle" href="#"><img src="{{url_for('static', filename='img/logo.png')}}" width="60" class="d-inline-block align-top" alt=""> Book Review</a>
+    <a class="navbar-brand align-middle" href="/"><img src="{{url_for('static', filename='img/logo.png')}}" width="60" class="d-inline-block align-top" alt=""> Book Review</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
+      <ul class="navbar-nav mr-auto text-center">
+        <li class="nav-item active text-center">
           <a class="nav-link" href="{{url_for('index')}}">Home </a>
         </li>
         {%if 'email' not in session %}
-        <li class="nav-item">
+        <li class="nav-item text-center">
           <a class="nav-link" href="{{url_for('login')}}">Login </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item text-center">
           <a class="nav-link" href="{{url_for('register')}}">Register </a>
         </li>
         {% else %}
-        <li class="nav-item">
+        <li class="nav-item text-center">
           <span class="nav-link">{{ session['first_name']}} {{ session['last_name']}}</span>
         </li>
-        <li class="nav-item">
+        <li class="nav-item text-center">
           <form class="nav-link" action="{{url_for('logout')}}" method="POST">
             <button type="submit" class="btn btn-primary">Logout</button>
           </form>
@@ -49,7 +49,7 @@
         {% endif %}
       </ul>
       {%if 'email' in session %}
-      <form class="form-inline my-2 my-lg-0" action="/search" method="POST">
+      <form class="form-inline my-2 my-lg-0" action="/search" method="GET">
         <input name="search" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
@@ -75,10 +75,16 @@
     </div>
   </div>
   <div class="container main">
-    {% block body %}
-    {% endblock %}
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="clo-12 col-md-10 col-lg-8">
+          {% block body %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
   </div>
-
+<hr>
   <footer class="footer">
     <div class="container">
       <div class="row align-items-center justify-content-center">
