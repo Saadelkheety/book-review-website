@@ -1,5 +1,6 @@
 import json
 import jsonify
+import math
 
 from flask import Flask, session, request, flash, redirect, url_for, render_template, Response
 from flask import abort
@@ -7,7 +8,7 @@ from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-from database_service import add_user, authenticate_user, search_books
+from database_service import add_user, authenticate_user, search_books, find_book
 from forms import RegistrationForm, LoginForm
 from decorators import authenticate
 
@@ -114,7 +115,7 @@ def search():
     page = request.args.get("page")
     if not page:
         page = 1
-    nr_of_pages = int((len(books) / PAGE_SIZE))
+    nr_of_pages = math.ceil(int((len(books) / PAGE_SIZE)))
     if len(books) == 0:
         flash("there are no results try another book or check the words you write.")
     if not nr_of_pages:
@@ -135,6 +136,12 @@ def search():
     # books = ','.join(map(str, books))
     # print(books)
     # return json.dumps(books)
+
+
+@app.route("/book/<string:isbn>")
+def book(isbn):
+    book = find_book(db, isbn)
+    return render_template("book.html", book=book)
 
 
 if __name__ == '__main__':

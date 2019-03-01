@@ -4,9 +4,6 @@
   color: inherit;
   text-decoration: inherit; }
 
-nav {
-  background-color: rgba(255, 255, 255, 0.5);
-  color: #000; }
 nav ul {
   align-items: center;
 }
@@ -38,3 +35,14 @@ footer {
   .flashes{
     margin-top: 30px;
   }
+.book{
+  text-transform: capitalize;
+}
+.search-results tbody tr{
+ text-transform: capitalize;
+}
+.search-results tbody tr:hover{
+  background-color: #28a745;
+  cursor: pointer;
+  color: white;
+}

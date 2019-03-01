@@ -6,7 +6,7 @@ Book review app
 {% block body %}
 {%if books%}
 <h3>Search Results</h3>
-<table class="table table-striped table-responsive">
+<table class="table table-striped table-responsive search-results">
   <thead>
     <tr>
       <th scope="col">ISBN</th>
@@ -17,7 +17,7 @@ Book review app
   </thead>
   <tbody>
     {% for book in books %}
-    <tr>
+    <tr onclick="window.location='/book/{{ book[1] }}';">
       <th scope="row">{{ book[1] }}</th>
       <td>{{ book[2] }}</td>
       <td>{{ book[3] }}</td>
@@ -60,7 +60,13 @@ Book review app
   </div>
   <button class="btn btn-outline-success" type="submit">Search</button>
 </form>
-
+<script type="text/javascript">
+  $(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
 {% endif %}
 {% endif %}
 {% endblock %}

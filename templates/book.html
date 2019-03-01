@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %}
+{%if book%}
+{{ book.title }}
+{% else %}
+Book Review App
+{% endif %}
+{% endblock %}
+{% block body %}
+{%if book%}
+<div class="card book">
+    <h3 class="card-header bg-primary text-white">{{ book.title }}</h3>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-6">Book Title</dt>
+            <dd class="col-6">{{ book.title }}</dd>
+            <dt class="col-6">Book Author</dt>
+            <dd class="col-6">{{ book.author }}</dd>
+            <dt class="col-6">Published Year</dt>
+            <dd class="col-6">{{ book.year }}</dd>
+            <dt class="col-6">ISBN</dt>
+            <dd class="col-6">{{ book.isbn }}</dd>
+        </dl>
+    </div>
+</div>
+{% else %}
+<h3>There are no books with this ISBN.</h3>
+{% endif %}
+{% endblock %}
