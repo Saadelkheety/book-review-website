@@ -61,13 +61,58 @@ def search_books(db, search):
         "search": "%" + search + "%"}).fetchall()
     return books
 
+
 def find_book(db, isbn):
     book = db.execute("SELECT * FROM books WHERE isbn=:search;", {
-        "search":isbn}).fetchone()
+        "search": isbn}).fetchone()
     if book:
         return book
     else:
         return None
+
+
+def add_review(db, review):
+    check_review = db.execute("SELECT * FROM reviews WHERE user_id=:user_id AND book_id=:book_id", {
+        "user_id": review["user_id"], "book_id": review["book_id"]}).fetchone()
+    db.commit()
+    if check_review:
+        return f"you already added a review to this book"
+    cmd = "INSERT INTO reviews (rating, review, user_id, book_id) VALUES (:rating, :review, :user_id, :book_id);"
+    try:
+        new_review = db.execute(cmd, {"rating": review["rating"], "review": review.get("review"),
+                                      "user_id": review["user_id"], "book_id": review["book_id"]})
+        db.commit()
+        return True
+    except:
+        return False
+    # user_check = db.execute("SELECT * FROM users WHERE email = :email", {"email": user["email"]}).fetchone()
+    # db.commit()
+    return "database error"
+
+
+def get_reviews(db, book_id):
+    reviews = db.execute("SELECT * FROM reviews WHERE book_id=:book_id", {
+        "book_id": book_id}).fetchall()
+    db.commit()
+    if reviews:
+        return reviews
+    else:
+        return None
+
+
+def count_reviews(db, book_id):
+    review_count = db.execute("SELECT count(*) FROM reviews WHERE book_id=:book_id", {
+        "book_id": book_id}).fetchone()[0]
+    db.commit()
+    return review_count
+
+
+def score_average(db, book_id):
+    average_score = db.execute("SELECT AVG(rating) FROM reviews WHERE book_id=:book_id", {
+        "book_id": book_id}).fetchone()[0]
+    db.commit()
+    return average_score
+
 
 if __name__ == "__main__":
     print(db)

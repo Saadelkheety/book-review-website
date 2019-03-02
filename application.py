@@ -1,6 +1,7 @@
 import json
 import jsonify
 import math
+import httplib2
 
 from flask import Flask, session, request, flash, redirect, url_for, render_template, Response
 from flask import abort
@@ -8,8 +9,8 @@ from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-from database_service import add_user, authenticate_user, search_books, find_book
-from forms import RegistrationForm, LoginForm
+from database_service import score_average, add_user, authenticate_user, count_reviews, search_books, find_book, add_review, get_reviews
+from forms import RegistrationForm, LoginForm, ReviewForm
 from decorators import authenticate
 
 app = Flask(__name__)
@@ -138,11 +139,73 @@ def search():
     # return json.dumps(books)
 
 
-@app.route("/book/<string:isbn>")
+@app.route("/book/<string:isbn>", methods=["post", "GET"])
+@authenticate
 def book(isbn):
+    form = ReviewForm(csrf_enabled=False)
+    if request.method == "POST":
+        review = {
+            "rating": form.rating.data,
+            "review": form.review.data,
+            "user_id": session["id"],
+            "book_id": form.book_id.data
+        }
+        add = add_review(db, review)
+        if add == True:
+            flash("your review has been added...")
+            return redirect(url_for("book", isbn=isbn))
+        elif add == False:
+            flash("Database Error..!, please Email: SaadElkheety@gmail.com")
+            return redirect(url_for("book", isbn=isbn))
+        else:
+            flash(add)
+            return redirect(url_for("book", isbn=isbn))
+    if request.method == "GET":
+        book = find_book(db, isbn)
+        if book:
+            reviews = get_reviews(db, book.id)
+            try:
+                url = f'https://www.goodreads.com/book/review_counts.json?key=fWW2DdoQzw82qH5DEIe4CQ&isbns={book.isbn}'
+                h = httplib2.Http()
+                result = h.request(url, 'GET')[1]
+                result = json.loads(result)['books'][0]
+                print(result)
+                goodreads = result
+            except:
+                goodreads = None
+        return render_template("book.html", book=book, reviews=reviews, goodreads=goodreads)
+
+
+@app.route("/api/<string:isbn>")
+@authenticate
+def api(isbn):
     book = find_book(db, isbn)
-    return render_template("book.html", book=book)
+    if not book:
+        abort(404)
+    review_count = count_reviews(db, book.id)
+    average_score = round(score_average(db, book.id), 2)
+    # return jsonify({
+    #     "title": book.title,
+    #     "author": book.author,
+    #     "year": book.year,
+    #     "isbn": book.isbn,
+    #     "review_count": review_count,
+    #     "average_score": average_score
+    # })
+    response = app.response_class(
+        response=json.dumps({
+            "title": book.title,
+            "author": book.author,
+            "year": book.year,
+            "isbn": book.isbn,
+            "review_count": review_count,
+            "average_score": str(average_score)
+        }),
+        status = 200,
+        mimetype = 'application/json'
+    )
+    return response
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug = True)

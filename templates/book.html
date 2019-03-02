@@ -9,19 +9,71 @@ Book Review App
 {% block body %}
 {%if book%}
 <div class="card book">
-    <h3 class="card-header bg-primary text-white">{{ book.title }}</h3>
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-6">Book Title</dt>
-            <dd class="col-6">{{ book.title }}</dd>
-            <dt class="col-6">Book Author</dt>
-            <dd class="col-6">{{ book.author }}</dd>
-            <dt class="col-6">Published Year</dt>
-            <dd class="col-6">{{ book.year }}</dd>
-            <dt class="col-6">ISBN</dt>
-            <dd class="col-6">{{ book.isbn }}</dd>
-        </dl>
+  <h3 class="card-header bg-primary text-white">{{ book.title }}</h3>
+  <div class="card-body">
+    <dl class="row">
+      <dt class="col-6">Book Title</dt>
+      <dd class="col-6">{{ book.title }}</dd>
+      <dt class="col-6">Book Author</dt>
+      <dd class="col-6">{{ book.author }}</dd>
+      <dt class="col-6">Published Year</dt>
+      <dd class="col-6">{{ book.year }}</dd>
+      <dt class="col-6">ISBN</dt>
+      <dd class="col-6">{{ book.isbn }}</dd>
+      {% if goodreads %}
+      <dt class="col-6">Average Rating <small>(goodreads)</small></dt>
+      <dd class="col-6">{{ goodreads['average_rating'] }}</dd>
+      <dt class="col-6">Number Of Ratings <small>(goodreads)</small></dt>
+      <dd class="col-6">{{ goodreads['ratings_count'] }}</dd>
+      {% endif %}
+    </dl>
+    <hr>
+    <h3>Reviews</h3>
+    {% for review in reviews %}
+    <div class="media border container">
+      <div class="media-body row mt-1">
+        <h5 class="mt-0 col-10"> <span class="badge badge-pill badge-secondary">{{ review.rating }} Stars</span></h5>
+        <p class="d-none d-sm-block col-10" style="padding:20px;">{{ review.review }}</p>
+      </div>
     </div>
+    {% endfor %}
+    <form class="border" action="/book/{{ book.isbn }}" method="post">
+      <fieldset class="form-group">
+        <div class="row">
+          <legend class="col-form-label col-sm-2 pt-0">Your Rate:</legend>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="customRadioInline1" value="1" name="rating" class="custom-control-input">
+            <label class="custom-control-label" for="customRadioInline1">1</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="customRadioInline2" value="2" name="rating" class="custom-control-input">
+            <label class="custom-control-label" for="customRadioInline2">2</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="customRadioInline3" value="3" name="rating" class="custom-control-input">
+            <label class="custom-control-label" for="customRadioInline3">3</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="customRadioInline4" value="4" name="rating" class="custom-control-input">
+            <label class="custom-control-label" for="customRadioInline4">4</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="customRadioInline5" value="5" name="rating" class="custom-control-input">
+            <label class="custom-control-label" for="customRadioInline5">5</label>
+          </div>
+        </div>
+      </fieldset>
+      <div class="form-group">
+        <label for="exampleFormControlTextarea1">Your review comment</label>
+        <textarea name="review" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+      </div>
+      <input id="book_id" name="book_id" type="hidden" value="{{book.id}}">
+      <small class="form-text text-muted">
+        You can only add one review wait the edit functionality
+      </small>
+      <button type="submit" class="btn btn-primary">Comment</button>
+    </form>
+  </div>
 </div>
 {% else %}
 <h3>There are no books with this ISBN.</h3>
