@@ -29,6 +29,7 @@ Book Review App
     </dl>
     <hr>
     <h3>Reviews</h3>
+    {% if review %}
     {% for review in reviews %}
     <div class="media border container">
       <div class="media-body row mt-1">
@@ -37,6 +38,7 @@ Book Review App
       </div>
     </div>
     {% endfor %}
+    {% endif %}
     <form class="border" action="/book/{{ book.isbn }}" method="post">
       <fieldset class="form-group">
         <div class="row">
