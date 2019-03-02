@@ -42,9 +42,11 @@ Book Review App
     <form class="border" action="/book/{{ book.isbn }}" method="post">
       <fieldset class="form-group">
         <div class="row">
+          {% if form.rating.errors %}
+          {% for error in form.password.errors %}
           <legend class="col-form-label col-sm-2 pt-0">Your Rate:</legend>
           <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="customRadioInline1" value="1" name="rating" class="custom-control-input">
+            <input required type="radio" id="customRadioInline1" value="1" name="rating" class="custom-control-input">
             <label class="custom-control-label" for="customRadioInline1">1</label>
           </div>
           <div class="custom-control custom-radio custom-control-inline">
@@ -66,6 +68,8 @@ Book Review App
         </div>
       </fieldset>
       <div class="form-group">
+        {% if form.review.errors %}
+        {% for error in form.password.errors %}
         <label for="exampleFormControlTextarea1">Your review comment</label>
         <textarea name="review" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
       </div>

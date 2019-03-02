@@ -173,7 +173,7 @@ def book(isbn):
                 goodreads = result
             except:
                 goodreads = None
-        return render_template("book.html", book=book, reviews=reviews, goodreads=goodreads)
+        return render_template("book.html", book=book, reviews=reviews, goodreads=goodreads, form=form)
 
 
 @app.route("/api/<string:isbn>")
