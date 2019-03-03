@@ -44,6 +44,9 @@ Book Review App
         <div class="row">
           {% if form.rating.errors %}
           {% for error in form.password.errors %}
+          <p class="error-message">{{ error }}</p>
+          {% endfor %}
+          {% endif %}
           <legend class="col-form-label col-sm-2 pt-0">Your Rate:</legend>
           <div class="custom-control custom-radio custom-control-inline">
             <input required type="radio" id="customRadioInline1" value="1" name="rating" class="custom-control-input">
@@ -70,6 +73,9 @@ Book Review App
       <div class="form-group">
         {% if form.review.errors %}
         {% for error in form.password.errors %}
+        <p class="error-message">{{ error }}</p>
+        {% endfor %}
+        {% endif %}
         <label for="exampleFormControlTextarea1">Your review comment</label>
         <textarea name="review" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
       </div>
